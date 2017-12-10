@@ -39,6 +39,7 @@ function stationClickEvents() {
 		$('#journey span').text('');
 		$('.line ul li button.start').removeClass('start');
 		$('.line ul li button.end').removeClass('end');
+		// clear highlighted buttons
 	})
 }
 
@@ -169,16 +170,21 @@ function createPath(pathArr, startLine, endLine) {
 		pathArr.pop();
 		var stop = 0;
 		// self invoking, recursive call on plotPath function while counting up pathArr, this loops through each element with a 500ms delay
-		(function plotPath(stop, pathArr, startLine) {
+		(function plotPath() {
 			setTimeout(function() {
-				$('#' + startLine + ' ul li button:contains("'+pathArr[stop]+'")').addClass('highlight');
-				console.log('delayed');
+				console.log(pathArr[stop]);
+				$('#' + startLine + ' ul li button').filter(function() { 
+					return $(this).text() === pathArr[stop];
+				}).addClass('highlight');
+				$('#' + endLine + ' ul li button').filter(function() { 
+					return $(this).text() === pathArr[stop];
+				}).addClass('highlight');
 				stop++;
 				if (stop < pathArr.length) {
 					plotPath(stop, pathArr, startLine);
 				}
 			}, 500)
-		})(stop, pathArr, startLine)
+		})()
 	}
 }
 
